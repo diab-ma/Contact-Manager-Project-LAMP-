@@ -10,14 +10,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
           extensions: mbstring, mysqli
           ini-values: post_max_size=256M, upload_max_filesize=256M
-      
+
       - name: Install Composer dependencies
         run: |
           if [ -f composer.json ]; then
@@ -33,7 +33,7 @@ jobs:
             }' > composer.json
             composer install --no-progress --prefer-dist
           fi
-      
+
       - name: Run tests
         run: |
           if [ -f phpunit.xml ]; then
@@ -41,7 +41,7 @@ jobs:
           else
             echo "No PHPUnit config found, skipping tests."
           fi
-  
+
   deploy:
     name: Deploy to DigitalOcean Droplet
     needs: build-and-test
@@ -50,48 +50,35 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Set up doctl
         uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.DO_TOKEN }}
-      
-      # Extra verbose debugging for SSH issues
-      - name: Setup SSH key with extensive debugging
+          token: ${{ secrets.DO_TOKEN }} # This seems unrelated to SSH, leaving it as is.
+
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Configure SSH options (optional, but good for non-interactive)
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval "$(ssh-agent -s)"
-          echo "Adding key to SSH agent..."
-          cat ~/.ssh/id_rsa | ssh-add -
-          
-          # Show key details for verification
-          echo "SSH Key fingerprint (compare with authorized_keys on server):"
-          ssh-keygen -l -f ~/.ssh/id_rsa
-          
-          # Try reading the public key directly
-          echo "Public key derived from private key:"
-          ssh-keygen -y -f ~/.ssh/id_rsa
-          
-          # Configure SSH for debugging
-          echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null\n\tLogLevel DEBUG3\n" > ~/.ssh/config
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null\n" > ~/.ssh/config
           chmod 600 ~/.ssh/config
 
-      
       - name: Verify SSH connection
-        run: ssh -vvv ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} 'echo "SSH connection successful"'
-      
+        run: sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} 'echo "SSH connection successful"'
+
       - name: Sync files to server
         run: |
-          rsync -az --delete \
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -az --delete \
             --exclude '.git/' \
             --exclude '.github/' \
+            -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }}:/var/www/html/
-      
+
       - name: Run remote deployment commands
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} '
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} '
             cd /var/www/html
             # install PHP dependencies on server if needed
             if [ -f composer.json ]; then
@@ -103,6 +90,8 @@ jobs:
               php artisan cache:clear
             fi
             # set proper permissions
+            # Consider if sudo is needed and if passwordless sudo is configured for this user.
+            # If sudo requires a password, this command will fail.
             sudo chown -R www-data:www-data /var/www/html
             # restart Apache to pick up any new configs
             sudo systemctl restart apache2

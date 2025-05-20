@@ -56,16 +56,21 @@ jobs:
         with:
           token: ${{ secrets.DO_TOKEN }}
       
-      - name: Add SSH key
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      # Use a more direct approach with SSH key
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          # Disable strict host key checking
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null\n" > ~/.ssh/config
       
       - name: Verify SSH connection
-        run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} 'echo "SSH connection successful"'
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} 'echo "SSH connection successful"'
       
       - name: Sync files to server
-        # using rsync for efficient file transfer; adjust excludes as needed
         run: |
           rsync -az --delete \
             --exclude '.git/' \
@@ -73,12 +78,8 @@ jobs:
             ./ ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }}:/var/www/html/
       
       - name: Run remote deployment commands
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.DROPLET_IP }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} '
             cd /var/www/html
             # install PHP dependencies on server if needed
             if [ -f composer.json ]; then
@@ -93,3 +94,4 @@ jobs:
             sudo chown -R www-data:www-data /var/www/html
             # restart Apache to pick up any new configs
             sudo systemctl restart apache2
+          '

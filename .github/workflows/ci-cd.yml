@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline with Password Auth
 on:
   push:
     branches:
@@ -23,7 +23,6 @@ jobs:
           if [ -f composer.json ]; then
             composer install --no-progress --prefer-dist
           else
-            echo "No composer.json found, creating a basic one"
             echo '{
               "name": "your-vendor/contact-manager",
               "description": "Contact Manager Project using LAMP stack",
@@ -43,7 +42,7 @@ jobs:
           fi
   
   deploy:
-    name: Deploy to DigitalOcean Droplet
+    name: Deploy to Server (Password Auth)
     needs: build-and-test
     if: github.ref == 'refs/heads/main' && success()
     runs-on: ubuntu-latest
@@ -51,47 +50,46 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Set up doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DO_TOKEN }}
+      # Install sshpass for password-based authentication
+      - name: Install sshpass
+        run: sudo apt-get install sshpass
       
-      # Use a more direct approach with SSH key
-      - name: Setup SSH key
+      # Create a deployment package
+      - name: Create deployment package
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-          # Disable strict host key checking
-          echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null\n" > ~/.ssh/config
+          zip -r deployment.zip . -x ".git/*" ".github/*"
       
-      - name: Verify SSH connection
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} 'echo "SSH connection successful"'
-      
-      - name: Sync files to server
+      # Deploy using password authentication
+      - name: Deploy to server (using password)
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
         run: |
-          rsync -az --delete \
-            --exclude '.git/' \
-            --exclude '.github/' \
-            ./ ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }}:/var/www/html/
-      
-      - name: Run remote deployment commands
-        run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} '
+          # Upload the deployment package
+          sshpass -e scp -o StrictHostKeyChecking=no deployment.zip ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }}:/tmp/
+          
+          # Extract and install on the server
+          sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} '
+            # Extract the deployment
+            unzip -o /tmp/deployment.zip -d /var/www/html/
+            
+            # Clean up
+            rm /tmp/deployment.zip
+            
+            # Install dependencies
             cd /var/www/html
-            # install PHP dependencies on server if needed
             if [ -f composer.json ]; then
               composer install --no-dev --optimize-autoloader
             fi
-            # run database migrations, clear caches, etc.
+            
+            # Run migrations if Laravel/framework project
             if [ -f artisan ]; then
               php artisan migrate --force
               php artisan cache:clear
             fi
-            # set proper permissions
+            
+            # Fix permissions
             sudo chown -R www-data:www-data /var/www/html
-            # restart Apache to pick up any new configs
+            
+            # Restart web server
             sudo systemctl restart apache2
           '

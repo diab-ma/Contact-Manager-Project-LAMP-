@@ -1,10 +1,8 @@
 name: CI/CD Pipeline
-
 on:
   push:
     branches:
       - main
-
 jobs:
   build-and-test:
     name: Build & Test
@@ -12,17 +10,30 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
           extensions: mbstring, mysqli
           ini-values: post_max_size=256M, upload_max_filesize=256M
-
+      
       - name: Install Composer dependencies
-        run: composer install --no-progress --no-suggest --prefer-dist
-
+        run: |
+          if [ -f composer.json ]; then
+            composer install --no-progress --prefer-dist
+          else
+            echo "No composer.json found, creating a basic one"
+            echo '{
+              "name": "your-vendor/contact-manager",
+              "description": "Contact Manager Project using LAMP stack",
+              "require": {
+                "php": ">=8.1"
+              }
+            }' > composer.json
+            composer install --no-progress --prefer-dist
+          fi
+      
       - name: Run tests
         run: |
           if [ -f phpunit.xml ]; then
@@ -30,7 +41,7 @@ jobs:
           else
             echo "No PHPUnit config found, skipping tests."
           fi
-
+  
   deploy:
     name: Deploy to DigitalOcean Droplet
     needs: build-and-test
@@ -39,17 +50,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Set up doctl
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DO_TOKEN }}
-
+      
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.8.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
+      
+      - name: Verify SSH connection
+        run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} 'echo "SSH connection successful"'
+      
       - name: Sync files to server
         # using rsync for efficient file transfer; adjust excludes as needed
         run: |
@@ -57,15 +71,13 @@ jobs:
             --exclude '.git/' \
             --exclude '.github/' \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }}:/var/www/html/
-
+      
       - name: Run remote deployment commands
         uses: appleboy/ssh-action@v0.6.1
         with:
           host: ${{ secrets.DROPLET_IP }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          # optional: disable host key checking
-          # strict: false
           script: |
             cd /var/www/html
             # install PHP dependencies on server if needed
@@ -77,5 +89,7 @@ jobs:
               php artisan migrate --force
               php artisan cache:clear
             fi
+            # set proper permissions
+            sudo chown -R www-data:www-data /var/www/html
             # restart Apache to pick up any new configs
             sudo systemctl restart apache2

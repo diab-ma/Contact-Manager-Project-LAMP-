@@ -56,19 +56,31 @@ jobs:
         with:
           token: ${{ secrets.DO_TOKEN }}
       
-      # Use a more direct approach with SSH key
-      - name: Setup SSH key
+      # Extra verbose debugging for SSH issues
+      - name: Setup SSH key with extensive debugging
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-          # Disable strict host key checking
-          echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null\n" > ~/.ssh/config
+          echo "Adding key to SSH agent..."
+          cat ~/.ssh/id_rsa | ssh-add -
+          
+          # Show key details for verification
+          echo "SSH Key fingerprint (compare with authorized_keys on server):"
+          ssh-keygen -l -f ~/.ssh/id_rsa
+          
+          # Try reading the public key directly
+          echo "Public key derived from private key:"
+          ssh-keygen -y -f ~/.ssh/id_rsa
+          
+          # Configure SSH for debugging
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null\n\tLogLevel DEBUG3\n" > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
       
       - name: Verify SSH connection
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} 'echo "SSH connection successful"'
+        run: ssh -vvv ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_IP }} 'echo "SSH connection successful"'
       
       - name: Sync files to server
         run: |

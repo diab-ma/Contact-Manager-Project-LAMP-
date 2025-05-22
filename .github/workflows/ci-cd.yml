@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - master
 jobs:
   build-and-test:
     name: Build & Test
@@ -45,7 +45,7 @@ jobs:
   deploy:
     name: Deploy to DigitalOcean Droplet
     needs: build-and-test
-    if: github.ref == 'refs/heads/main' && success()
+    if: github.ref == 'refs/heads/master' && success()
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

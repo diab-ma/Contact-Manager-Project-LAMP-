@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - The Contact Barista</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="auth-container">
+        <header class="auth-header">
+            <h1>The Contact Barista</h1>
+            <p>Sign in to your Daily Grind.</p>
+        </header>
+
+        <main class="auth-main">
+            <div class="auth-card">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginUsername">Username or Email</label>
+                        <input type="text" id="loginUsername" name="loginUsername" placeholder="Your Username or Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="loginPassword" placeholder="Your Password" required>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-block" onclick="doLogin();">
+                        <i class="fas fa-sign-in-alt"></i> Sign In & Stir
+                    </button>
+                </form>
+                <p id="loginResult" class="form-message"></p>
+                <div class="auth-switch">
+                    <p>New here? <a href="register.html">Join the Blend!</a></p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="auth-footer">
+            <p>&copy; 2025 The Contact Barista. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/md5.js"></script>
+    <script src="js/code.js"></script>
+</body>
+</html>

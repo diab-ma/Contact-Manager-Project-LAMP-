@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - The Contact Barista</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="auth-container">
+        <header class="auth-header">
+            <h1>The Contact Barista</h1>
+            <p>Join the Blend - Create Your Account.</p>
+        </header>
+
+        <main class="auth-main">
+            <div class="auth-card">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerFirstName">First Name</label>
+                        <input type="text" id="registerFirstName" name="registerFirstName" placeholder="E.g., John" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerLastName">Last Name</label>
+                        <input type="text" id="registerLastName" name="registerLastName" placeholder="E.g., Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerUsername">Username</label>
+                        <input type="text" id="registerUsername" name="registerUsername" placeholder="Choose a username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" name="registerEmail" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" name="registerPassword" placeholder="Create a strong password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirm Password</label>
+                        <input type="password" id="registerConfirmPassword" name="registerConfirmPassword" placeholder="Confirm your password" required>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-block" onclick="doRegister();">
+                        <i class="fas fa-user-plus"></i> Create My Account
+                    </button>
+                </form>
+                <p id="registerResult" class="form-message"></p>
+                <div class="auth-switch">
+                    <p>Already have an account? <a href="index.html">Sign In!</a></p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="auth-footer">
+            <p>&copy; 2025 The Contact Barista. All rights reserved.</p>
+        </footer>
+    </div>
+    <script src="js/md5.js"></script>
+    <script src="js/code.js"></script>
+</body>
+</html>

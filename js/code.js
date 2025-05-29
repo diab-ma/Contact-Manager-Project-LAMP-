@@ -1,4 +1,5 @@
 const urlBase = 'https://majorregrets.com/LAMPAPI';
+// URLs become: https://majorregrets.com/LAMPAPI/Login.php
 const extension = 'php';
 
 let userId = 0;
@@ -13,11 +14,11 @@ function doLogin()
 	
 	let login = document.getElementById("loginUsername").value; // Corrected from loginName to loginUsername to match index.html
 	let password = document.getElementById("loginPassword").value;
-//	var hash = md5( password ); // md5 hashing is commented out, ensure consistency with backend if re-enabled
+	var hash = md5( password ); // md5 hashing is commented out, ensure consistency with backend if re-enabled
 	
 	document.getElementById("loginResult").innerHTML = "";
 
-	let tmp = {login:login,password:password};
+	let tmp = {login:login,password:hash};
 //	var tmp = {login:login,password:hash};
 	let jsonPayload = JSON.stringify( tmp );
 	

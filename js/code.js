@@ -1,4 +1,4 @@
-const urlBase = 'majorregrets.com';
+const urlBase = 'https://majorreggets.com/LAMPAPI';
 const extension = 'php';
 
 let userId = 0;

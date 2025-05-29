@@ -98,10 +98,12 @@ DELIMITER ;
 DELIMITER //
 
 CREATE PROCEDURE DeleteContact (
+  IN p_UserID INT,
   IN p_ID INT
+
 )
 BEGIN
-  DELETE FROM Contacts WHERE ID = p_ID;
+  DELETE FROM Contacts WHERE ID = p_ID AND UserID = p_UserID;
 END //
 
 DELIMITER ;

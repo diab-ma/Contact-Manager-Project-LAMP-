@@ -1,5 +1,4 @@
-const urlBase = 'https://majorregrets.com/LAMPAPI';
-// URLs become: https://majorregrets.com/LAMPAPI/Login.php
+const urlBase = 'https://majorregrets.com/LAMPAPI/';
 const extension = 'php';
 
 let userId = 0;
@@ -12,14 +11,12 @@ function doLogin()
 	firstName = "";
 	lastName = "";
 	
-	let login = document.getElementById("loginUsername").value; // Corrected from loginName to loginUsername to match index.html
+	let login = document.getElementById("loginUsername").value;
 	let password = document.getElementById("loginPassword").value;
-	var hash = md5( password ); // md5 hashing is commented out, ensure consistency with backend if re-enabled
 	
 	document.getElementById("loginResult").innerHTML = "";
 
-	let tmp = {login:login,password:hash};
-//	var tmp = {login:login,password:hash};
+	let tmp = {login:login,password:password};
 	let jsonPayload = JSON.stringify( tmp );
 	
 	let url = urlBase + 'Login.' + extension;
@@ -47,7 +44,7 @@ function doLogin()
 
 				saveCookie();
 	
-				window.location.href = "contacts.html"; // Changed from color.html to contacts.html as per common app flow
+				window.location.href = "contacts.html";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -62,12 +59,12 @@ function doLogin()
 function doRegister() {
     const firstName = document.getElementById("registerFirstName").value;
     const lastName = document.getElementById("registerLastName").value;
-    const login = document.getElementById("registerUsername").value; // 'login' is the key Register.php expects for username
+    const login = document.getElementById("registerUsername").value;
     const password = document.getElementById("registerPassword").value;
     const confirmPassword = document.getElementById("registerConfirmPassword").value;
 
     const registerResult = document.getElementById("registerResult");
-    registerResult.innerHTML = ""; // Clear previous messages
+    registerResult.innerHTML = "";
 
     // Basic client-side validation
     if (!firstName || !lastName || !login || !password || !confirmPassword) {
@@ -85,7 +82,6 @@ function doRegister() {
         lastName: lastName,
         login: login,
         password: password
-        // email is not sent as Register.php doesn't handle it.
     };
     const jsonPayload = JSON.stringify(payload);
 
@@ -96,19 +92,16 @@ function doRegister() {
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
     try {
         xhr.onreadystatechange = function() {
-            if (this.readyState == 4) { // Check if request is complete
-                if (this.status == 200) { // Check if request was successful
+            if (this.readyState == 4) {
+                if (this.status == 200) {
                     try {
                         const jsonObject = JSON.parse(xhr.responseText);
                         if (jsonObject.error && jsonObject.error !== "") {
-                             // Display error from PHP script if any
                             registerResult.innerHTML = jsonObject.error;
                         } else if (jsonObject.message) {
-                             // Display success message from PHP script
                             registerResult.innerHTML = jsonObject.message + (jsonObject.id ? " Your ID is " + jsonObject.id + "." : "");
-                            // Optionally, redirect to login page or clear form
-                            // document.getElementById("registerForm").reset();
-                            // setTimeout(() => { window.location.href = "index.html"; }, 2000);
+                            // Optionally redirect to login page after successful registration
+                            setTimeout(() => { window.location.href = "index.html"; }, 2000);
                         } else {
                             registerResult.innerHTML = "Registration successful, but no specific message received.";
                         }
@@ -117,15 +110,13 @@ function doRegister() {
                         console.error("Response parsing error:", xhr.responseText);
                     }
                 } else {
-                    // Handle HTTP errors (e.g., 400, 409, 500)
                     let errorMessage = "Registration request failed. Status: " + this.status;
                      try {
                         const errorObject = JSON.parse(xhr.responseText);
                         if (errorObject.error) {
-                            errorMessage = errorObject.error; // Use error message from PHP if available
+                            errorMessage = errorObject.error;
                         }
                     } catch (e) {
-                        // Response might not be JSON, use default error message
                         console.error("Error parsing error response:", xhr.responseText);
                     }
                     registerResult.innerHTML = errorMessage;
@@ -144,7 +135,7 @@ function saveCookie()
 	let minutes = 20;
 	let date = new Date();
 	date.setTime(date.getTime()+(minutes*60*1000));	
-	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString() + ";path=/"; // Added path=/
+	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString() + ";path=/";
 }
 
 function readCookie()
@@ -170,16 +161,10 @@ function readCookie()
 		}
 	}
 	
-	// This logic seems to be for pages that require login.
-	// For index.html or register.html, this might redirect unnecessarily if a cookie exists.
-	// We'll assume this is primarily for pages like contacts.html.
 	const currentPage = window.location.pathname.split("/").pop();
 	if (userId < 0 && currentPage !== "index.html" && currentPage !== "register.html" && currentPage !== "") {
 		window.location.href = "index.html";
-	} else if (userId > 0 && (currentPage === "index.html" || currentPage === "register.html" || currentPage === "")) {
-        // If logged in and on login/register page, redirect to contacts
-        // window.location.href = "contacts.html"; // This might be too aggressive, user might want to see the page.
-    }
+	}
     
     // Update userName element if it exists (e.g., on contacts.html)
     const userNameElement = document.getElementById("userName");
@@ -193,20 +178,18 @@ function doLogout()
 	userId = 0;
 	firstName = "";
 	lastName = "";
-	document.cookie = "firstName=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;"; // More robust cookie clearing
+	document.cookie = "firstName=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     document.cookie = "lastName=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     document.cookie = "userId=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 	window.location.href = "index.html";
 }
 
 // Functions for Contact Management (Dashboard - contacts.html)
-// Ensure `urlBase` and `userId` are accessible.
-
 function searchContacts() {
     const searchText = document.getElementById("searchText").value;
     const contactListDiv = document.getElementById("contactList");
     const searchStatus = document.getElementById("searchStatus");
-    contactListDiv.innerHTML = ""; // Clear previous results
+    contactListDiv.innerHTML = "";
     searchStatus.innerHTML = "Searching...";
 
     const payload = {
@@ -214,7 +197,7 @@ function searchContacts() {
         search: searchText
     };
     const jsonPayload = JSON.stringify(payload);
-    const url = urlBase + '/SearchContacts.' + extension;
+    const url = urlBase + 'SearchContacts.' + extension;
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
@@ -224,11 +207,11 @@ function searchContacts() {
             if (this.readyState == 4) {
                 if (this.status == 200) {
                     const jsonObject = JSON.parse(xhr.responseText);
-                    if (jsonObject.error && jsonObject.error !== "No Records Found") { // Allow "No Records Found" to be handled as empty results
+                    if (jsonObject.error && jsonObject.error !== "No Records Found") {
                         searchStatus.innerHTML = "Error: " + jsonObject.error;
                         contactListDiv.innerHTML = "";
                     } else if (jsonObject.results && jsonObject.results.length > 0) {
-                        searchStatus.innerHTML = ""; // Clear searching message
+                        searchStatus.innerHTML = "";
                         jsonObject.results.forEach(contact => {
                             const card = `
                                 <div class="contact-card">
@@ -277,7 +260,7 @@ function handleSaveContact() {
     }
 
     const payload = {
-        userId: userId, // Assumes userId is globally available and set after login
+        userId: userId,
         firstName: firstName,
         lastName: lastName,
         phone: phone,
@@ -285,11 +268,11 @@ function handleSaveContact() {
     };
 
     let url;
-    if (contactId) { // If contactId exists, it's an update
-        payload.id = contactId; // Or whatever Update API expects for the contact's ID
-        url = urlBase + '/UpdateContact.' + extension; // Assuming UpdateContact.php
-    } else { // Otherwise, it's a new contact
-        url = urlBase + '/RegisterContact.' + extension; // Existing RegisterContact.php
+    if (contactId) {
+        payload.id = contactId;
+        url = urlBase + 'UpdateContact.' + extension;
+    } else {
+        url = urlBase + 'RegisterContact.' + extension;
     }
     
     const jsonPayload = JSON.stringify(payload);
@@ -300,7 +283,7 @@ function handleSaveContact() {
     try {
         xhr.onreadystatechange = function() {
             if (this.readyState == 4) {
-                modalFormMessage.className = "form-message"; // Reset class
+                modalFormMessage.className = "form-message";
                 if (this.status == 200) {
                     const jsonObject = JSON.parse(xhr.responseText);
                     if (jsonObject.error && jsonObject.error !== "") {
@@ -310,7 +293,7 @@ function handleSaveContact() {
                         modalFormMessage.innerHTML = contactId ? "Contact updated successfully!" : "Contact added successfully!";
                         modalFormMessage.className = "form-message success";
                         closeContactModal();
-                        searchContacts(); // Refresh the contact list
+                        searchContacts();
                     }
                 } else {
                     modalFormMessage.innerHTML = "Request failed. Status: " + this.status;
@@ -328,9 +311,9 @@ function handleSaveContact() {
 function openAddContactModal() {
     document.getElementById("modalTitle").innerText = "Add New Blend";
     document.getElementById("contactForm").reset();
-    document.getElementById("contactId").value = ""; // Ensure contactId is empty for new contacts
+    document.getElementById("contactId").value = "";
     document.getElementById("modalFormMessage").innerHTML = "";
-    document.getElementById("modalFormMessage").className = "form-message"; // Reset class
+    document.getElementById("modalFormMessage").className = "form-message";
     document.getElementById("contactModal").style.display = "flex";
 }
 
@@ -355,7 +338,6 @@ function confirmDeleteContact(contactId, contactName) {
     deleteConfirmMessage.innerHTML = `Are you sure you want to archive the blend for "<strong>${contactName}</strong>"? This action cannot be undone.`;
     
     const confirmDeleteButton = document.getElementById("confirmDeleteButton");
-    // Clone and replace the button to remove old event listeners
     const newConfirmDeleteButton = confirmDeleteButton.cloneNode(true);
     confirmDeleteButton.parentNode.replaceChild(newConfirmDeleteButton, confirmDeleteButton);
     
@@ -368,18 +350,18 @@ function confirmDeleteContact(contactId, contactName) {
 
 
 function deleteContact(contactId) {
-    const contactOpStatus = document.getElementById("contactOpStatus"); // For general status messages on the dashboard
+    const contactOpStatus = document.getElementById("contactOpStatus");
     contactOpStatus.innerHTML = "";
 
     const payload = {
-        id: contactId, // Assuming Delete API expects the contact's ID
-        userId: userId  // Include userId if API requires it for deletion validation
+        id: contactId,
+        userId: userId
     };
     const jsonPayload = JSON.stringify(payload);
-    const url = urlBase + '/DeleteContact.' + extension; // Assuming DeleteContact.php
+    const url = urlBase + 'DeleteContact.' + extension;
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true); // Or "DELETE" if API is set up for that verb
+    xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
     try {
         xhr.onreadystatechange = function() {
@@ -393,7 +375,7 @@ function deleteContact(contactId) {
                     } else {
                         contactOpStatus.innerHTML = "Contact archived successfully!";
                         contactOpStatus.className = "form-message success";
-                        searchContacts(); // Refresh contact list
+                        searchContacts();
                     }
                 } else {
                     contactOpStatus.innerHTML = "Failed to delete contact. Status: " + this.status;

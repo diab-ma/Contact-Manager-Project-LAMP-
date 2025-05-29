@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-const urlBase = 'https://majorreggets.com/LAMPAPI';
-=======
 const urlBase = 'https://majorregrets.com/LAMPAPI';
->>>>>>> 5ce58d0 (hi)
 const extension = 'php';
 
 let userId = 0;

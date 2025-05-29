@@ -22,8 +22,12 @@ if( $conn->connect_error )
 }
 else
 {
+
+    $passwordInput = $inData["password"];
+    $hashedPassword = md5($passwordInput);
+
     $stmt = $conn->prepare("SELECT ID,firstName,lastName FROM Users WHERE Login=? AND Password =?");
-    $stmt->bind_param("ss", $inData["login"], $inData["password"]);
+    $stmt->bind_param("ss", $inData["login"], $hashedPassword);
     $stmt->execute();
     $result = $stmt->get_result();
 

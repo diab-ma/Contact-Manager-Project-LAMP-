@@ -62,7 +62,6 @@ function doRegister() {
     const firstName = document.getElementById("registerFirstName").value;
     const lastName = document.getElementById("registerLastName").value;
     const login = document.getElementById("registerUsername").value; // 'login' is the key Register.php expects for username
-    const email = document.getElementById("registerEmail").value; // Currently not used by Register.php or Users table
     const password = document.getElementById("registerPassword").value;
     const confirmPassword = document.getElementById("registerConfirmPassword").value;
 

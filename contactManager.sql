@@ -122,4 +122,21 @@ END //
 DELIMITER ;
 
 
+DELIMITER //
+
+CREATE PROCEDURE GetContactsLazy (
+    IN in_userId INT,
+    IN in_limit INT,
+    IN in_offset INT
+)
+BEGIN
+    SELECT * FROM Contacts
+    WHERE UserID = in_userId
+    ORDER BY ID ASC
+    LIMIT in_limit OFFSET in_offset;
+END //
+
+DELIMITER ;
+
+
 

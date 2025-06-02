@@ -62,3 +62,35 @@ Authenticates a user by login and password.
   "lastName": "BOGGER",
   "error": ""
 }
+
+Register User – RegisterUser.php
+Method: POST or Swaggerhub
+
+## Description: 
+Registers a new user in the system.
+
+## Request Body:
+{
+  "firstName": "ROGER43",
+  "lastName": "BOGGER",
+  "login": "ROGER12",
+  "password": "BOGGER2"
+}
+
+## Response:
+{
+  "id": 53,
+  "firstName": "ROGER43",
+  "lastName": "BOGGER",
+  "error": ""
+}
+
+# Notes
+All responses use Content-Type: application/json
+
+All endpoints are designed for AJAX calls
+
+CORS headers are enabled for cross-origin requests
+
+SwaggerHub documentation is available for API testing and demonstration
+

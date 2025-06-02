@@ -37,4 +37,6 @@ This database structure supports a contact management system where:
 
 # API Structure
 
+## Overview
+The backend API of the Contact Manager is built using PHP and MySQL. It follows REST principles and communicates using JSON. Each endpoint corresponds to a core feature in the system (registration, login, contact creation, search, update, and delete). All APIs are AJAX-enabled and protected using prepared statements and stored procedures to prevent SQL injection.
 

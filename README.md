@@ -1,1 +1,73 @@
 # Contact-Manager-Project-LAMP
+
+# Database Structure
+
+## Overview
+This LAMP stack application uses a simple relational database with two main entities: **Users** and **Contacts**, connected through a one-to-many relationship.
+
+## Database Schema
+
+### User Table
+The User entity stores authentication and basic user information:
+- **ID**: Primary key (unique identifier)
+- **UserID**: Secondary identifier 
+- **Password**: User authentication credential
+- **Login**: Username/login identifier
+- **FirstName**: User's first name
+- **LastName**: User's last name
+
+### Contacts Table
+The Contacts entity stores contact information for each user:
+- **ID**: Primary key (unique identifier)
+- **FirstName**: Contact's first name
+- **LastName**: Contact's last name
+- **Email**: Contact's email address
+- **Phone**: Contact's phone number
+
+## Relationships
+- **One-to-Many**: Each User can have multiple Contacts
+
+## Functionality
+This database structure supports a contact management system where:
+1. Users can register and authenticate with login credentials
+2. Each authenticated user can store and manage their personal contacts
+3. Contact information includes standard communication details (name, email, phone)
+4. Data isolation ensures users can only access their own contact lists
+
+
+# API Structure
+
+## Overview
+The backend API of the Contact Manager is built using PHP and MySQL. It follows REST principles and communicates using JSON. Each endpoint corresponds to a core feature in the system (registration, login, contact creation, search, update, and delete). All APIs are AJAX-enabled and protected using prepared statements and stored procedures to prevent SQL injection.
+
+# API Endpoints
+
+## Method 
+Post or Swaggerhub
+## Description: 
+Authenticates a User by Login and password
+
+## Request Body:
+{
+  "login": "ROGER1",
+  "password": "ROGER"
+}
+
+## Response:
+{
+  "id": 43,
+  "firstName": "ROGER1",
+  "lastName": "BOGGER",
+  "error": ""
+}
+
+
+# Notes:
+All responses use Content-Type: application/json
+
+All endpoints are designed for AJAX calls
+
+CORS headers are enabled for cross-origin requests
+
+SwaggerHub documentation is available for API testing and demonstration
+

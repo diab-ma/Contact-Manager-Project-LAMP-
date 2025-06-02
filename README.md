@@ -38,7 +38,11 @@ This database structure supports a contact management system where:
 # API Structure
 
 ## Overview
-The backend API of the Contact Manager is built using PHP and MySQL. It follows REST principles and communicates using JSON. Each endpoint corresponds to a core feature in the system (registration, login, contact creation, search, update, and delete). All APIs are AJAX-enabled and protected using prepared statements and stored procedures to prevent SQL injection.
+Contact Manager is a secure, responsive LAMP stack web application that allows users to manage personal contacts through a modern interface backed by a RESTful API. Users can register, log in, and perform full CRUD operations (Create, Read, Update, Delete) on their contact list. Each user's data is securely isolated and managed using a MySQL relational database with stored procedures.
+
+The backend API is built using PHP and communicates via JSON, while the frontend uses AJAX for real-time interactions. Pagination is supported to ensure performance with large datasets. API endpoints are documented using SwaggerHub, and best practices for authentication, error handling, and input validation are followed. This project showcases professional full-stack development aligned with modern software engineering standards.
+
+
 
 ## API Endpoints Example
 Login – Login.php

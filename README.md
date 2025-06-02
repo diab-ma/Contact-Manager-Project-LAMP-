@@ -40,3 +40,24 @@ This database structure supports a contact management system where:
 ## Overview
 The backend API of the Contact Manager is built using PHP and MySQL. It follows REST principles and communicates using JSON. Each endpoint corresponds to a core feature in the system (registration, login, contact creation, search, update, and delete). All APIs are AJAX-enabled and protected using prepared statements and stored procedures to prevent SQL injection.
 
+## API Endpoints
+Login – Login.php
+Method: POST or SwaggerHub
+
+## Description: Authenticates a user by login and password.
+
+## Request Body:
+
+
+{
+  "login": "ROGER1",
+  "password": "ROGER"
+}
+## Response:
+
+{
+  "id": 43,
+  "firstName": "ROGER1",
+  "lastName": "BOGGER",
+  "error": ""
+}

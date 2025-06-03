@@ -17,16 +17,18 @@
 
         <main class="auth-main">
             <div class="auth-card">
-                <form id="loginForm">
+                <form id="loginForm" onsubmit="event.preventDefault(); doLogin();">
                     <div class="form-group">
                         <label for="loginUsername">Username</label>
                         <input type="text" id="loginUsername" name="loginUsername" placeholder="Your Username" required>
+                        <span class="error-text" id="loginUsernameError"></span>
                     </div>
                     <div class="form-group">
                         <label for="loginPassword">Password</label>
                         <input type="password" id="loginPassword" name="loginPassword" placeholder="Your Password" required>
+                        <span class="error-text" id="loginPasswordError"></span>
                     </div>
-                    <button type="button" class="btn btn-primary btn-block" onclick="doLogin();">
+                    <button type="submit" class="btn btn-primary btn-block" id="loginButton">
                         <i class="fas fa-sign-in-alt"></i> Sign In & Stir
                     </button>
                 </form>

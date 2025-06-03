@@ -8,25 +8,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body onload="readCookie(); searchContacts();"> <div class="dashboard-container">
+<body onload="readCookie(); searchContacts();"> 
+    <div class="dashboard-container">
         <header class="dashboard-header">
             <div class="logo">
                 The Contact Barista
             </div>
             <div class="user-info">
                 <span id="userName">Brewing for...</span>
-                <button onclick="doLogout();" class="btn btn-icon btn-logout" title="Logout">
+                <button onclick="doLogout();" class="btn btn-icon btn-logout" title="Logout" aria-label="Logout">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
             </div>
         </header>
 
         <main class="dashboard-main">
+            <!-- Success/Error notification -->
+            <div id="notification" class="notification" role="alert" aria-live="polite"></div>
+            
             <div class="controls-bar">
                 <div class="search-container">
-                    <input type="text" id="searchText" placeholder="Filter your contacts..." onkeyup="searchContacts();">
-                    <button class="btn btn-secondary" onclick="searchContacts();">
+                    <input type="text" id="searchText" placeholder="Filter your contacts..." onkeyup="debounceSearch();" aria-label="Search contacts">
+                    <button class="btn btn-secondary" onclick="searchContacts();" aria-label="Search">
                         <i class="fas fa-search"></i> Search
+                    </button>
+                    <button class="btn btn-secondary btn-clear" onclick="clearSearch();" aria-label="Clear search" title="Clear search">
+                        <i class="fas fa-times"></i>
                     </button>
                 </div>
                 <button class="btn btn-primary" onclick="openAddContactModal();">
@@ -34,60 +41,74 @@
                 </button>
             </div>
 
-            <p id="contactOpStatus" class="form-message"></p> <div id="contactList" class="contact-list-container">
-                <!-- Example of how a contact card might look (for styling purposes):
-                <div class="contact-card">
-                    <h3>John Doe <span class="contact-id">(ID: 1)</span></h3>
-                    <p><i class="fas fa-phone"></i> 555-1234</p>
-                    <p><i class="fas fa-envelope"></i> john.doe@example.com</p>
-                    <div class="contact-actions">
-                        <button class="btn btn-icon btn-edit" onclick="openEditContactModal(1, 'John Doe', '555-1234', 'john.doe@example.com')"><i class="fas fa-pencil-alt"></i> Edit</button>
-                        <button class="btn btn-icon btn-delete" onclick="confirmDeleteContact(1, 'John Doe')"><i class="fas fa-trash-alt"></i> Delete</button>
-                    </div>
+            <p id="contactOpStatus" class="form-message"></p>
+            
+            <!-- Results count -->
+            <div id="resultsCount" class="results-count"></div>
+            
+            <div id="contactList" class="contact-list-container">
+                <!-- Loading spinner -->
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin fa-3x"></i>
+                    <p>Loading your contacts...</p>
                 </div>
-                -->
             </div>
-             <p id="searchStatus" class="form-message text-center"></p> </main>
+            
+            <!-- Empty state -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-address-book fa-4x"></i>
+                <h3>No contacts yet!</h3>
+                <p>Start building your contact list by clicking "New Contact on Tap"</p>
+            </div>
+            
+            <p id="searchStatus" class="form-message text-center"></p>
+        </main>
 
         <footer class="dashboard-footer">
             <p>&copy; 2025 The Contact Barista. All rights reserved.</p>
         </footer>
     </div>
 
-    <div id="contactModal" class="modal">
+    <!-- Add/Edit Contact Modal -->
+    <div id="contactModal" class="modal" role="dialog" aria-labelledby="modalTitle">
         <div class="modal-content">
-            <span class="close-button" onclick="closeContactModal();">&times;</span>
+            <span class="close-button" onclick="closeContactModal();" aria-label="Close">&times;</span>
             <h2 id="modalTitle">Add New Blend</h2>
-            <form id="contactForm">
+            <form id="contactForm" onsubmit="event.preventDefault(); handleSaveContact();">
                 <input type="hidden" id="contactId" name="contactId">
                 <div class="form-group">
-                    <label for="contactFirstName">First Name</label>
-                    <input type="text" id="contactFirstName" name="contactFirstName" required>
+                    <label for="contactFirstName">First Name <span class="required">*</span></label>
+                    <input type="text" id="contactFirstName" name="contactFirstName" required aria-required="true">
+                    <span class="error-text" id="firstNameError"></span>
                 </div>
                 <div class="form-group">
-                    <label for="contactLastName">Last Name</label>
-                    <input type="text" id="contactLastName" name="contactLastName" required>
+                    <label for="contactLastName">Last Name <span class="required">*</span></label>
+                    <input type="text" id="contactLastName" name="contactLastName" required aria-required="true">
+                    <span class="error-text" id="lastNameError"></span>
                 </div>
                 <div class="form-group">
                     <label for="contactPhone">Phone</label>
                     <input type="tel" id="contactPhone" name="contactPhone" placeholder="E.g., 555-123-4567">
+                    <span class="error-text" id="phoneError"></span>
                 </div>
                 <div class="form-group">
                     <label for="contactEmail">Email</label>
                     <input type="email" id="contactEmail" name="contactEmail" placeholder="E.g., name@example.com">
+                    <span class="error-text" id="emailError"></span>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="handleSaveContact();">
+                <button type="submit" class="btn btn-primary" id="saveContactButton">
                     <i class="fas fa-save"></i> Save Blend
                 </button>
             </form>
-            <p id="modalFormMessage" class="form-message"></p>
+            <p id="modalFormMessage" class="form-message" role="status"></p>
         </div>
     </div>
 
-    <div id="deleteConfirmModal" class="modal">
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="modal" role="dialog" aria-labelledby="deleteConfirmTitle">
         <div class="modal-content">
-            <span class="close-button" onclick="closeDeleteConfirmModal();">&times;</span>
-            <h2>Archive this Blend?</h2>
+            <span class="close-button" onclick="closeDeleteConfirmModal();" aria-label="Close">&times;</span>
+            <h2 id="deleteConfirmTitle">Archive this Blend?</h2>
             <p id="deleteConfirmMessage">Are you sure you want to delete this contact? This action cannot be undone.</p>
             <div class="modal-actions">
                 <button type="button" class="btn btn-danger" id="confirmDeleteButton">

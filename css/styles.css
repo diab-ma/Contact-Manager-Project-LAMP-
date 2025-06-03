@@ -1,38 +1,28 @@
-/* Global Styles & Variables - "Daily Grind HQ" Theme */
+/* Global Styles & Variables */
 :root {
-    /* Dark Theme Palette */
-    --primary-bg: #2D2A2E; /* Dark Charcoal/Espresso Mix */
-    --secondary-bg: #3E3B40; /* Slightly Lighter Dark Gray for cards/elements */
-    --card-bg: #3E3B40; /* Alias for secondary-bg for clarity */
-    --dialog-bg: #4A464D; /* Background for modals, slightly lighter */
+    --primary-bg: #F5F5DC; /* Creamy Latte */
+    --card-bg: #FFFFFF; /* Warm Paper Cup */
+    --text-dark: #3E2723; /* Dark Roast */
+    --accent-red: #B71C1C; /* Coffee Cherry Red */
+    --accent-green: #689F38; /* Muted Green Bean */
+    --text-subtle: #A1887F; /* Steamed Milk */
+    --border-light: #EFEBE9; /* Light Brownish Grey for borders */
+    --error-red: #d32f2f;
+    --success-green: #388e3c;
 
-    --text-light: #EAEAEA; /* Off-white/Light Cream for primary text on dark backgrounds */
-    --text-dark-on-light: #333333; /* For text on light modal backgrounds if chosen */
-    --text-subtle: #A09DA6; /* Muted gray for less important text */
-
-    --accent-primary: #B08D57; /* Muted Gold/Bronze - primary call to action */
-    --accent-secondary: #8A6D46; /* Darker Gold/Bronze - for hover or secondary accents */
-    --accent-green-new: #6B8E23; /* OliveDrab - for edit/success actions */
-    --accent-warning-new: #DAA520; /* GoldenRod - for delete/warning emphasis */
-    --accent-error-new: #CD5C5C; /* IndianRed - for errors */
-
-    --border-color: #5C5860; /* Subtle border for elements */
-    --input-bg: #2A272B; /* Dark background for input fields */
-
-    /* Fonts - Keeping existing good choices */
     --font-display: 'Pacifico', cursive;
     --font-heading: 'Montserrat', sans-serif;
     --font-body: 'Open Sans', sans-serif;
 
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
-    --shadow-md: 0 5px 15px rgba(0,0,0,0.3);
-    --border-radius: 6px; /* Slightly sharper */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+    --border-radius: 8px;
 }
 
 body {
     font-family: var(--font-body);
     background-color: var(--primary-bg);
-    color: var(--text-light);
+    color: var(--text-dark);
     margin: 0;
     line-height: 1.6;
     display: flex;
@@ -42,18 +32,17 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    color: var(--text-light); /* Main headings light */
+    color: var(--text-dark);
     margin-top: 0;
 }
 
 a {
-    color: var(--accent-primary);
-    text-decoration: underline; /* Ensure links are always distinguishable */
+    color: var(--accent-red);
+    text-decoration: none;
 }
 
 a:hover {
-    color: var(--accent-secondary);
-    text-decoration: none; /* Optional: remove underline on hover */
+    text-decoration: underline;
 }
 
 /* Utility Classes */
@@ -61,12 +50,11 @@ a:hover {
     text-align: center;
 }
 
-.required { /* For required field indicators */
-    color: var(--accent-primary);
-    font-weight: bold;
+.required {
+    color: var(--accent-red);
 }
 
-/* Loading Spinner - Adapted for dark theme */
+/* Loading Spinner */
 .loading-spinner {
     text-align: center;
     padding: 3rem;
@@ -74,27 +62,24 @@ a:hover {
 }
 
 .loading-spinner i {
-    color: var(--accent-primary);
+    color: var(--accent-red);
     margin-bottom: 1rem;
 }
 
-/* Empty State - Adapted for dark theme */
+/* Empty State */
 .empty-state {
     text-align: center;
     padding: 3rem;
     color: var(--text-subtle);
-    background-color: var(--secondary-bg);
-    border-radius: var(--border-radius);
-    margin: 2rem auto;
 }
 
 .empty-state i {
-    color: var(--border-color);
+    color: var(--border-light);
     margin-bottom: 1rem;
 }
 
 .empty-state h3 {
-    color: var(--text-light);
+    color: var(--text-dark);
     margin-bottom: 0.5rem;
 }
 
@@ -106,7 +91,7 @@ a:hover {
     font-style: italic;
 }
 
-/* Notification - Adapted for dark theme */
+/* Notification */
 .notification {
     position: fixed;
     top: 20px;
@@ -118,15 +103,16 @@ a:hover {
     display: none;
     animation: slideIn 0.3s ease-out;
     max-width: 400px;
-    color: #FFFFFF; /* White text for notifications */
 }
 
 .notification.success {
-    background-color: var(--accent-green-new);
+    background-color: var(--success-green);
+    color: white;
 }
 
 .notification.error {
-    background-color: var(--accent-error-new);
+    background-color: var(--error-red);
+    color: white;
 }
 
 .notification.show {
@@ -147,34 +133,32 @@ a:hover {
 /* Form Validation Styles */
 .error-text {
     display: block;
-    color: var(--accent-error-new);
+    color: var(--error-red);
     font-size: 0.85rem;
     margin-top: 0.25rem;
     min-height: 1.2em;
 }
 
 input.error {
-    border-color: var(--accent-error-new) !important;
-    box-shadow: 0 0 0 2px rgba(205, 92, 92, 0.3); /* IndianRed shadow */
+    border-color: var(--error-red) !important;
 }
 
-input.success { /* Optional success styling for inputs */
-    border-color: var(--accent-green-new) !important;
+input.success {
+    border-color: var(--success-green) !important;
 }
 
-/* Button Styles - Modernized for Dark Theme */
+/* Button Styles */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 24px; /* Slightly larger padding */
+    padding: 10px 20px;
     font-family: var(--font-heading);
     font-size: 1rem;
-    font-weight: 600; /* Bolder buttons */
-    border: 1px solid transparent;
+    border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease;
     text-align: center;
     white-space: nowrap;
     position: relative;
@@ -182,19 +166,18 @@ input.success { /* Optional success styling for inputs */
 }
 
 .btn:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
 }
 
-.btn.loading::after { /* Keep spinner, color will be inherited */
+.btn.loading::after {
     content: '';
     position: absolute;
     width: 20px;
     height: 20px;
-    margin: auto; /* This might not center correctly, adjust if needed */
-    top: 0; bottom: 0; left:0; right:0;
+    margin: auto;
     border: 2px solid transparent;
-    border-top-color: currentColor; /* Spinner takes button text color */
+    border-top-color: currentColor;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -205,59 +188,53 @@ input.success { /* Optional success styling for inputs */
 }
 
 .btn i {
-    margin-right: 10px; /* More space for icon */
+    margin-right: 8px;
 }
+
+.btn:last-child i {
+    margin-right: 0;
+    margin-left: 8px;
+}
+
 .btn.btn-icon i {
     margin: 0;
 }
 
-/* Primary Button - Muted Gold */
 .btn-primary {
-    background-color: var(--accent-primary);
-    color: var(--primary-bg); /* Dark text on gold button */
-    border-color: var(--accent-primary);
+    background-color: var(--accent-red);
+    color: var(--card-bg);
 }
+
 .btn-primary:hover:not(:disabled) {
-    background-color: var(--accent-secondary);
-    border-color: var(--accent-secondary);
+    background-color: #931616;
     box-shadow: var(--shadow-sm);
-    transform: translateY(-2px);
-}
-
-/* Secondary/Ghost Button Style */
-.btn-secondary {
-    background-color: transparent;
-    color: var(--accent-primary);
-    border-color: var(--accent-primary);
-}
-.btn-secondary:hover:not(:disabled) {
-    background-color: rgba(176, 141, 87, 0.1); /* Faint gold highlight */
-    color: var(--accent-secondary);
-    border-color: var(--accent-secondary);
-}
-
-/* Danger/Warning Button - Using new warning color */
-.btn-danger { /* For delete confirmation */
-    background-color: var(--accent-warning-new);
-    color: var(--primary-bg);
-    border-color: var(--accent-warning-new);
-}
-.btn-danger:hover:not(:disabled) {
-    background-color: #C8941C; /* Darker GoldenRod */
-    border-color: #C8941C;
     transform: translateY(-1px);
 }
 
-.btn-clear { /* For clearing search etc. */
+.btn-secondary {
+    background-color: var(--text-subtle);
+    color: var(--card-bg);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: #846e65;
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: #c9302c;
+    transform: translateY(-1px);
+}
+
+.btn-clear {
     padding: 10px 12px;
     margin-left: 0.5rem;
-    background-color: var(--secondary-bg);
-    color: var(--text-subtle);
-    border-color: var(--border-color);
-}
-.btn-clear:hover:not(:disabled) {
-    background-color: var(--border-color);
-    color: var(--text-light);
 }
 
 .btn-block {
@@ -269,8 +246,7 @@ input.success { /* Optional success styling for inputs */
     padding: 8px 12px;
 }
 
-
-/* Form Styles - Modernized for Dark Theme */
+/* Form Styles */
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -278,8 +254,8 @@ input.success { /* Optional success styling for inputs */
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: 600; /* Slightly bolder labels */
-    color: var(--text-subtle);
+    font-weight: bold;
+    color: var(--text-dark);
 }
 
 .form-group input[type="text"],
@@ -288,12 +264,12 @@ input.success { /* Optional success styling for inputs */
 .form-group input[type="tel"] {
     width: 100%;
     padding: 12px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-light);
     border-radius: var(--border-radius);
     box-sizing: border-box;
     font-size: 1rem;
-    color: var(--text-light);
-    background-color: var(--input-bg);
+    color: var(--text-dark);
+    background-color: #fff;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -302,8 +278,8 @@ input.success { /* Optional success styling for inputs */
 .form-group input[type="email"]:focus,
 .form-group input[type="tel"]:focus {
     outline: none;
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.25); /* Muted gold focus ring */
+    border-color: var(--accent-red);
+    box-shadow: 0 0 0 2px rgba(183, 28, 28, 0.2);
 }
 
 .form-message {
@@ -314,14 +290,14 @@ input.success { /* Optional success styling for inputs */
 }
 
 .form-message.success {
-    color: var(--accent-green-new);
+    color: var(--accent-green);
 }
 
 .form-message.error {
-    color: var(--accent-error-new);
+    color: var(--accent-red);
 }
 
-/* Authentication Page Styles - "Daily Grind HQ" */
+/* Authentication Page Styles */
 .auth-container {
     display: flex;
     flex-direction: column;
@@ -330,24 +306,6 @@ input.success { /* Optional success styling for inputs */
     min-height: 100vh;
     padding: 20px;
     box-sizing: border-box;
-    /* === IMPORTANT: Update this path to your image === */
-    background: url('../img/exam_fail_background.png') no-repeat center center/cover; /* From 613220943627568076.png */
-    position: relative;
-}
-.auth-container::before { /* Dark overlay for readability */
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(45, 42, 46, 0.75); /* 75% --primary-bg overlay */
-    z-index: 1;
-}
-
-.auth-header, .auth-main, .auth-footer {
-    position: relative; /* To appear above the overlay */
-    z-index: 2;
 }
 
 .auth-header {
@@ -355,44 +313,33 @@ input.success { /* Optional success styling for inputs */
     margin-bottom: 2rem;
 }
 
-.auth-header h1 { /* Site Title */
+.auth-header h1 {
     font-family: var(--font-display);
-    font-size: 3.5rem; /* Larger display font */
-    color: var(--text-light);
+    font-size: 3rem;
+    color: var(--text-dark);
     margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Subtle text shadow */
 }
 
-.auth-header p { /* Tagline */
-    font-size: 1.2rem;
+.auth-header p {
+    font-size: 1.1rem;
     color: var(--text-subtle);
 }
 
 .auth-main {
     width: 100%;
-    max-width: 420px; /* Slightly wider card */
+    max-width: 400px;
 }
 
 .auth-card {
-    background-color: rgba(62, 59, 64, 0.9); /* Semi-transparent --secondary-bg, or var(--card-bg) with opacity */
-    padding: 2.5rem; /* More padding */
+    background-color: var(--card-bg);
+    padding: 2rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-color); /* Subtle border for card */
-    backdrop-filter: blur(5px); /* Frosted glass effect - check browser support */
-    -webkit-backdrop-filter: blur(5px);
 }
 
 .auth-switch {
     text-align: center;
     margin-top: 1.5rem;
-}
-.auth-switch p, .auth-switch a {
-    color: var(--text-subtle);
-}
-.auth-switch a {
-    color: var(--accent-primary);
-    font-weight: 600;
 }
 
 .auth-footer {
@@ -402,7 +349,7 @@ input.success { /* Optional success styling for inputs */
     font-size: 0.9rem;
 }
 
-/* Dashboard Styles - "Daily Grind HQ" */
+/* Dashboard Styles */
 .dashboard-container {
     display: flex;
     flex-direction: column;
@@ -410,20 +357,18 @@ input.success { /* Optional success styling for inputs */
 }
 
 .dashboard-header {
-    background-color: var(--secondary-bg); /* Dark header */
-    color: var(--text-light);
+    background-color: var(--text-dark);
+    color: var(--card-bg);
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: var(--shadow-sm);
-    border-bottom: 1px solid var(--border-color);
 }
 
 .dashboard-header .logo {
     font-family: var(--font-display);
     font-size: 1.8rem;
-    color: var(--accent-primary); /* Gold logo */
 }
 
 .dashboard-header .user-info {
@@ -434,25 +379,22 @@ input.success { /* Optional success styling for inputs */
 .dashboard-header .user-info span {
     margin-right: 1rem;
     font-size: 0.9rem;
-    color: var(--text-subtle);
 }
 
-.btn-logout { /* Ghost button style */
+.btn-logout {
     background-color: transparent;
-    color: var(--text-subtle);
-    border: 1px solid var(--text-subtle);
-    padding: 8px 15px;
+    color: var(--card-bg);
+    border: 1px solid var(--card-bg);
 }
+
 .btn-logout:hover {
-    color: var(--text-light);
-    border-color: var(--text-light);
-    background-color: rgba(234, 234, 234, 0.1);
+    background-color: rgba(255,255,255,0.1);
 }
 
 .dashboard-main {
     flex-grow: 1;
     padding: 2rem;
-    max-width: 1100px; /* Wider content area */
+    max-width: 1000px;
     margin: 0 auto;
     width: 100%;
     box-sizing: border-box;
@@ -475,13 +417,17 @@ input.success { /* Optional success styling for inputs */
     min-width: 250px;
 }
 
-.search-container input[type="text"] { /* Inherits from global form styles, but can be specific */
+.search-container input[type="text"] {
     flex-grow: 1;
+    padding: 10px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
 }
 
 .contact-list-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Slightly wider cards min */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
     min-height: 200px;
 }
@@ -491,22 +437,20 @@ input.success { /* Optional success styling for inputs */
     padding: 1.5rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contact-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 10px rgba(176, 141, 87, 0.15); /* Subtle gold glow on hover */
-    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
-.contact-card h3 { /* Contact Name */
-    font-size: 1.5rem; /* Larger name */
-    margin-bottom: 0.75rem;
-    color: var(--text-light); /* Main contact name */
+.contact-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-red);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -519,16 +463,16 @@ input.success { /* Optional success styling for inputs */
 }
 
 .contact-card p {
-    margin-bottom: 0.6rem;
-    color: var(--text-subtle); /* Contact details more subtle */
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
     font-size: 0.95rem;
     display: flex;
     align-items: center;
 }
 
 .contact-card p i {
-    margin-right: 10px;
-    color: var(--accent-primary); /* Gold icons */
+    margin-right: 8px;
+    color: var(--text-subtle);
     width: 16px;
     text-align: center;
 }
@@ -536,9 +480,9 @@ input.success { /* Optional success styling for inputs */
 .contact-actions {
     margin-top: auto;
     padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-light);
     display: flex;
-    gap: 0.75rem; /* More space between action buttons */
+    gap: 0.5rem;
     justify-content: flex-end;
 }
 
@@ -547,36 +491,34 @@ input.success { /* Optional success styling for inputs */
 }
 
 .btn-edit {
-    background-color: var(--accent-green-new);
+    background-color: var(--accent-green);
     color: white;
-    border-color: var(--accent-green-new);
-}
-.btn-edit:hover {
-    background-color: #5A7A1F; /* Darker OliveDrab */
-    border-color: #5A7A1F;
 }
 
-.btn-delete { /* Used for "Archive" button */
-    background-color: var(--accent-warning-new);
-    color: var(--primary-bg);
-    border-color: var(--accent-warning-new);
+.btn-edit:hover {
+    background-color: #558B2F;
 }
+
+.btn-delete {
+    background-color: #f0ad4e;
+    color: white;
+}
+
 .btn-delete:hover {
-    background-color: #C8941C;
-    border-color: #C8941C;
+    background-color: #ec971f;
 }
 
 .dashboard-footer {
     text-align: center;
     padding: 1.5rem;
-    background-color: var(--secondary-bg);
-    border-top: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-light);
     color: var(--text-subtle);
     font-size: 0.9rem;
     margin-top: auto;
 }
 
-/* Modal Styles - Modernized for Dark Theme */
+/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -586,13 +528,13 @@ input.success { /* Optional success styling for inputs */
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.65); /* Darker overlay for modal background */
+    background-color: rgba(0,0,0,0.5);
     align-items: center;
     justify-content: center;
 }
 
 .modal-content {
-    background-color: var(--dialog-bg); /* Specific background for modals */
+    background-color: var(--card-bg);
     margin: auto;
     padding: 2rem;
     border-radius: var(--border-radius);
@@ -601,17 +543,16 @@ input.success { /* Optional success styling for inputs */
     max-width: 500px;
     position: relative;
     animation: fadeInModal 0.3s ease-out;
-    border: 1px solid var(--border-color);
 }
 
 @keyframes fadeInModal {
-    from {
-        opacity: 0;
-        transform: scale(0.95) translateY(-10px);
+    from { 
+        opacity: 0; 
+        transform: translateY(-20px); 
     }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
     }
 }
 
@@ -628,15 +569,15 @@ input.success { /* Optional success styling for inputs */
 
 .close-button:hover,
 .close-button:focus {
-    color: var(--text-light);
+    color: var(--text-dark);
+    text-decoration: none;
 }
 
-.modal-content h2 { /* Modal Title */
+.modal-content h2 {
     font-family: var(--font-heading);
-    color: var(--accent-primary); /* Gold title for modal */
+    color: var(--accent-red);
     margin-bottom: 1.5rem;
     text-align: center;
-    font-size: 1.8rem; /* Larger modal title */
 }
 
 .modal-actions {
@@ -646,36 +587,44 @@ input.success { /* Optional success styling for inputs */
     margin-top: 1.5rem;
 }
 
-/* Responsive Adjustments - Review for Dark Theme */
+/* Responsive Adjustments */
 @media (max-width: 768px) {
     .dashboard-header {
         flex-direction: column;
         gap: 0.5rem;
         padding: 1rem;
     }
+    
     .dashboard-header .user-info {
         width: 100%;
         justify-content: space-between;
     }
+
     .controls-bar {
         flex-direction: column;
         align-items: stretch;
     }
+    
     .search-container {
         width: 100%;
     }
-    .controls-bar .btn-primary { /* Add Contact button */
+    
+    .controls-bar .btn-primary {
         width: 100%;
     }
+
     .dashboard-main {
-        padding: 1.5rem; /* Slightly more padding on mobile */
+        padding: 1rem;
     }
+
     .contact-list-container {
-        grid-template-columns: 1fr; /* Single column on smaller screens */
+        grid-template-columns: 1fr;
     }
+    
     .auth-header h1 {
-        font-size: 2.8rem;
+        font-size: 2.5rem;
     }
+    
     .notification {
         right: 10px;
         left: 10px;
@@ -685,30 +634,30 @@ input.success { /* Optional success styling for inputs */
 
 @media (max-width: 480px) {
     .auth-header h1 {
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
+    
     .auth-card {
-        padding: 2rem;
+        padding: 1.5rem;
     }
+    
     .modal-content {
         padding: 1.5rem;
     }
+    
     .modal-content h2 {
-        font-size: 1.6rem;
-    }
-    .btn { /* Slightly smaller padding on very small screens */
-        padding: 10px 18px;
+        font-size: 1.5rem;
     }
 }
 
-/* Focus styles for accessibility - Updated for dark theme */
-*:focus-visible { /* Use :focus-visible for better UX */
-    outline: 3px solid var(--accent-primary);
+/* Focus styles for accessibility */
+*:focus {
+    outline: 2px solid var(--accent-red);
     outline-offset: 2px;
-    box-shadow: 0 0 0 5px rgba(176, 141, 87, 0.2); /* Gold glow */
 }
 
-/* Remove default outline if :focus-visible is supported and you prefer custom only */
-*:focus:not(:focus-visible) {
-  outline: none;
+button:focus,
+a:focus {
+    outline: 2px solid var(--accent-red);
+    outline-offset: 2px;
 }

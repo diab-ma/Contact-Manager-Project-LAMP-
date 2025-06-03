@@ -1,0 +1,209 @@
+openapi: 3.0.0
+info:
+  title: Contact Manager API
+  version: 1.0.0
+  description: API for managing personal contacts with user registration, login, and CRUD functionality.
+
+servers:
+  - url: https://majorregrets.com/LAMPAPI
+
+tags:
+  - name: Auth
+    description: User registration and login
+  - name: Contacts
+    description: Contact management endpoints
+
+paths:
+  /Register.php:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - firstName
+                - lastName
+                - login
+                - password
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                login:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User registered successfully
+        '400':
+          description: Missing or invalid input
+
+  /Login.php:
+    post:
+      tags:
+        - Auth
+      summary: Log in an existing user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - login
+                - password
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          description: Invalid login credentials
+
+  /SearchContacts.php:
+    post:
+      tags:
+        - Contacts
+      summary: Search for contacts by name
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - search
+              properties:
+                userId:
+                  type: integer
+                search:
+                  type: string
+      responses:
+        '200':
+          description: Matching contacts returned
+
+  /RegisterContact.php:
+    post:
+      tags:
+        - Contacts
+      summary: Add a new contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - firstName
+                - lastName
+                - phone
+                - email
+              properties:
+                userId:
+                  type: integer
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Contact added successfully
+
+  /UpdateContact.php:
+    post:
+      tags:
+        - Contacts
+      summary: Update an existing contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - userId
+                - firstName
+                - lastName
+                - phone
+                - email
+              properties:
+                id:
+                  type: integer
+                userId:
+                  type: integer
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Contact updated successfully
+
+  /DeleteContact.php:
+    post:
+      tags:
+        - Contacts
+      summary: Delete a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - id
+              properties:
+                userId:
+                  type: integer
+                id:
+                  type: integer
+      responses:
+        '200':
+          description: Contact deleted successfully
+  /GetContactsLazy.php:
+    post:
+      tags:
+        - Contacts
+      summary: Get contacts using lazy loading (pagination)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - limit
+                - offset
+              properties:
+                userId:
+                  type: integer
+                limit:
+                  type: integer
+                offset:
+                  type: integer
+      responses:
+        '200':
+          description: Contacts retrieved successfully

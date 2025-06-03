@@ -42,6 +42,10 @@ Contact Manager is a secure, responsive LAMP stack web application that allows u
 
 The backend API is built using PHP and communicates via JSON, while the frontend uses AJAX for real-time interactions. Pagination is supported to ensure performance with large datasets. API endpoints are documented using SwaggerHub, and best practices for authentication, error handling, and input validation are followed. This project showcases professional full-stack development aligned with modern software engineering standards.
 
+## API Documentation
+## API Documentation
+
+The OpenAPI specification is available in [`api-specs/swagger.yaml`](api-specs/swagger.yaml). You can also view and test it on [SwaggerHub](https://app.swaggerhub.com/apis/contactmanagerapi/ContactManagerAPI/1.0.0#/).
 
 
 ## API Endpoints Example

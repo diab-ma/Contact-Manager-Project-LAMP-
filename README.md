@@ -98,3 +98,46 @@ CORS headers are enabled for cross-origin requests
 
 SwaggerHub documentation is available for API testing and demonstration
 
+## Frontend (User Interface)
+
+The frontend of "The Contact Barista" provides an interactive and responsive user experience for managing personal contacts. It is built using standard web technologies and communicates with the backend LAMP API via asynchronous JavaScript (AJAX) calls.
+
+### Key Features & Functionality:
+
+* **User Authentication:**
+    * Secure and user-friendly forms for **Login** (`index.html`) and **Registration** (`register.html`).
+    * Client-side validation provides immediate feedback to the user.
+* **Contact Management Dashboard (`contacts.html`):**
+    * **Dynamic Contact Display:** Contacts are fetched and displayed dynamically.
+    * **CRUD Operations:** Users can Create, Read, Update, and Delete contacts seamlessly using AJAX.
+    * **Search Functionality:** A real-time search filters contacts by name, phone, or email
+    * **Results Count:** Displays the number of contacts found or total contacts.
+* **Responsive Design:**
+    * Fully responsive layout that adapts to different screen sizes (desktop, tablets, and mobile phones) using CSS3 media queries.
+* **User Experience (UX) Enhancements:**
+    * **Modal Dialogs:** Used for creating new contacts, editing existing ones, and confirming deletions, providing a focused user workflow.
+    * **Notifications:** Clear success and error messages are displayed to the user for various actions.
+    * **Loading States & Empty States:** Visual cues like loading spinners and "no contacts found" messages improve the perceived performance and user understanding.
+    * **Session Management:** User session is managed using cookies, and an auto-logout feature is implemented after a period of inactivity.
+
+### Technologies Used:
+
+* **HTML5:** For structuring the web pages.
+* **CSS3:** For styling, layout, responsiveness, and the custom "Contact Barista" theme (`css/styles.css`).
+* **JavaScript (Vanilla):** Core logic for user interactions, DOM manipulation, client-side validation, and API communication (`js/code.js`).
+* **MD5.js:** Included in the project (`js/md5.js`). (Primary password hashing for authentication is securely handled server-side by the PHP API.)
+
+### File Structure:
+
+* `index.html`: The login page for existing users.
+* `register.html`: The registration page for new users.
+* `contacts.html`: The main dashboard page where users manage their contacts after logging in.
+* `css/styles.css`: Contains all custom CSS rules, including theming, layout, and responsive design adjustments.
+* `js/code.js`: The primary JavaScript file responsible for all client-side logic, including API interactions, event handling, DOM updates, and user experience enhancements.
+* `js/md5.js`: A library for MD5 hashing.
+
+### API Interaction:
+
+The frontend uses `XMLHttpRequest` (AJAX) to asynchronously communicate with the backend PHP API endpoints. Data is exchanged in JSON format. All necessary API endpoints as defined in the [SwaggerHub documentation](https://app.swaggerhub.com/apis/contactmanagerapi/ContactManagerAPI/1.0.0#/) (e.g., `Login.php`, `Register.php`, `SearchContacts.php`, `RegisterContact.php`, `UpdateContact.php`, `DeleteContact.php`) are consumed to provide the full range of application features.
+
+
